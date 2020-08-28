@@ -116,7 +116,8 @@ trait BaseGetPoster {
 
   protected def slurpApacheHeaders(in: Array[Header]):
   Map[String, List[String]] = {
-    val headerSet: List[(String, String)] = for (e <- in.toList) yield (e.getName -> e.getValue)
+    val headersAsList: List[Header] = in.toList
+    val headerSet: List[(String, String)] = headersAsList.map((e: Header) => Tuple2(e.getName, e.getValue))
 
     headerSet.foldLeft[Map[String, List[String]]](Map.empty)((acc, e) =>
         acc + (e._1 -> (e._2 :: acc.getOrElse(e._1, Nil))))
@@ -829,7 +830,7 @@ abstract class BaseResponse(override val baseUrl: String,
       case g: Group => unapply(g.nodes)
       case n: Text => None
       case sn: SpecialNode => None
-      case n: NodeSeq => 
+      case n: NodeSeq =>
        val ns: Seq[Node] = n
        val x: Seq[Elem] = ns.flatMap(v => unapply(v))
        x.headOption
@@ -887,7 +888,7 @@ abstract class BaseResponse(override val baseUrl: String,
 
   def xmlMatch(findFunc: Elem => NodeSeq, filterFunc: Node => Boolean): Boolean =
     xml.toList flatMap (theXml => findFunc(theXml)) exists ( n => filterFunc(trim(n)))
-      
+
   def getOrFail(success: Boolean, msg: String, errorFunc: ReportFailure) =
     if (success)
       this.asInstanceOf[SelfType]

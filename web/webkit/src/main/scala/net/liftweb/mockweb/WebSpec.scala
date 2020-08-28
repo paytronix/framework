@@ -82,7 +82,7 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
     def withReqFor (url : String, contextPath : String = "") =
       new ReqSpecification(description, url, contextPath)
 
-    def withReqFor (req : HttpServletRequest) = 
+    def withReqFor (req : HttpServletRequest) =
       new ReqSpecification(description, req)
 
     def withTemplateFor (url : String, session : Box[LiftSession] = Empty, contextPath : String = "") =
@@ -139,7 +139,7 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
 
     /**
      * Modifies the request to POST the given request body XML.
-     */    
+     */
     def withPost (node : NodeSeq) = withMods { mockReq =>
       mockReq.body = node
       mockReq.method = "POST"
@@ -166,7 +166,7 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
 
     /**
      * Modifies the request to PUT the given request body XML.
-     */    
+     */
     def withPut (node : NodeSeq) = withMods { mockReq =>
       mockReq.body = node
       mockReq.method = "PUT"
@@ -186,14 +186,14 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
    * This class provides a wrapper to test methods that require an
    * initialized S.
    */
-  class SessionSpecification (description : String, 
-                              val req : HttpServletRequest, 
+  class SessionSpecification (description : String,
+                              val req : HttpServletRequest,
                               session : Box[LiftSession]) extends ModifiableRequest[SessionSpecification] {
     def this (description : String, url : String, session : Box[LiftSession], contextPath : String) =
       this(description, new MockHttpServletRequest(url, contextPath), session)
 
     def in(expectations : => Result) =
-      exampleFactory newExample(description, {
+      fragmentFactory.example(description, {
         LiftRulesMocker.devTestLiftRulesInstance.doWith(liftRules) {
           MockWeb.useLiftRules.doWith(true) {
             MockWeb.testS(req, session) {
@@ -208,13 +208,13 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
    * This class provides a wrapper to test methods that require an
    * initialized Req.
    */
-  class ReqSpecification (description : String, 
+  class ReqSpecification (description : String,
                           val req : HttpServletRequest) extends ModifiableRequest[ReqSpecification] {
     def this (description : String, url : String, contextPath : String) =
       this(description, new MockHttpServletRequest(url, contextPath))
 
     def in(expectations : Req => Result) =
-      exampleFactory newExample(description, {
+      fragmentFactory.example(description, {
         LiftRulesMocker.devTestLiftRulesInstance.doWith(liftRules) {
           MockWeb.useLiftRules.doWith(true) {
             MockWeb.testReq(req)(expectations)
@@ -234,7 +234,7 @@ abstract class WebSpec(boot : () => Any = () => {}) extends Specification with X
       this(description, new MockHttpServletRequest(url, contextPath), session)
 
     def in(expectations : Box[NodeSeq] => Result) =
-      exampleFactory.newExample(description, {
+      fragmentFactory.example(description, {
         LiftRulesMocker.devTestLiftRulesInstance.doWith(liftRules) {
           MockWeb.useLiftRules.doWith(true) {
             MockWeb.testS(req, session) {

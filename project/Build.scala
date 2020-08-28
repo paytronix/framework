@@ -22,7 +22,7 @@ import Dependencies._
 
 object BuildDef extends Build {
 
-  lazy val liftProjects = core ++ web ++ persistence
+  lazy val liftProjects = core ++ web // ++ persistence
 
   lazy val framework =
     liftProject("lift-framework", file("."))
@@ -50,10 +50,7 @@ object BuildDef extends Build {
     coreProject("common")
       .settings(description := "Common Libraties and Utilities",
                 libraryDependencies ++= Seq(slf4j_api, logback, slf4j_log4j12),
-                libraryDependencies <++= scalaVersion {
-                  case "2.11.0" | "2.11.1" => Seq(scala_xml, scala_parser)
-                  case _ => Seq()
-                }
+                libraryDependencies ++= Seq(scala_xml, scala_parser)
       )
 
   lazy val actor =
@@ -61,16 +58,13 @@ object BuildDef extends Build {
         .dependsOn(common)
         .settings(description := "Simple Actor",
                   parallelExecution in Test := false)
-                  
+
   lazy val markdown =
     coreProject("markdown")
         .settings(description := "Markdown Parser",
                   parallelExecution in Test := false,
-                  libraryDependencies <++= scalaVersion { sv => Seq(scalatest(sv), junit) },
-                  libraryDependencies <++= scalaVersion {
-                    case "2.11.0" | "2.11.1" => Seq(scala_xml, scala_parser)
-                    case _ => Seq()
-                  }
+                  libraryDependencies ++= Seq(scalatest, junit),
+                  libraryDependencies ++= Seq(scala_xml, scala_parser)
       )
 
   lazy val json =
@@ -109,7 +103,8 @@ object BuildDef extends Build {
   // Web Projects
   // ------------
   lazy val web: Seq[ProjectReference] =
-    Seq(testkit, webkit, wizard)
+    Seq(testkit, webkit)
+//    Seq(testkit, webkit, wizard)
 
   lazy val testkit =
     webProject("testkit")
@@ -123,19 +118,18 @@ object BuildDef extends Build {
         .settings(yuiCompressor.Plugin.yuiSettings: _*)
         .settings(description := "Webkit Library",
                   parallelExecution in Test := false,
-                  libraryDependencies <++= scalaVersion { sv =>
-                    Seq(commons_fileupload, servlet_api, specs2(sv).copy(configurations = Some("provided")), jetty6, jwebunit)
-                  },
+                  libraryDependencies ++= Seq(commons_fileupload, servlet_api, scalatest, specs2.copy(configurations = Some("provided")), specs2Common.copy(configurations = Some("provided")), specs2Matcher.copy(configurations = Some("provided")), specs2MatcherExtra.copy(configurations = Some("provided")), jetty6, jwebunit),
                   initialize in Test <<= (sourceDirectory in Test) { src =>
                     System.setProperty("net.liftweb.webapptest.src.test.webapp", (src / "webapp").absString)
                   })
-
+/*
   lazy val wizard =
     webProject("wizard")
         .dependsOn(webkit, db)
         .settings(description := "Wizard Library")
+*/
 
-
+/*
   // Persistence Projects
   // --------------------
   lazy val persistence: Seq[ProjectReference] =
@@ -196,9 +190,11 @@ object BuildDef extends Build {
                     System.setProperty("apacheds.working.dir", (ct / "apacheds").absolutePath)
                   })
 
+//  def persistenceProject = liftProject("persistence") _
+*/
+
   def coreProject = liftProject("core") _
   def webProject = liftProject("web") _
-  def persistenceProject = liftProject("persistence") _
 
   /** Project definition helper that simplifies creation of `ProjectReference`.
     *

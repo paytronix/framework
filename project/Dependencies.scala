@@ -32,9 +32,7 @@ object Dependencies {
 
   lazy val scalazGroup        = defaultOrMapped("org.scalaz")
   lazy val scalazVersion      = defaultOrMapped("6.0.4")
-  lazy val scalaz7Version     = defaultOrMapped("7.0.0",  "2.11.0" -> "7.0.6", "2.11.1" -> "7.0.6")
-  lazy val specs2Version      = defaultOrMapped("1.12.3", "2.11.0" -> "2.3.11", "2.11.1" -> "2.3.11")
-  lazy val scalatestVersion   = defaultOrMapped("1.9.1",  "2.11.0" -> "2.1.3", "2.11.1" -> "2.1.3")
+  lazy val scalaz7Version     = defaultOrMapped("7.0.0",  "2.11.0" -> "7.0.6", "2.11.1" -> "7.0.6", "2.12.10" -> "7.2.30")
 
   // Compile scope:
   // Scope available in all classpath, transitive by default.
@@ -54,8 +52,8 @@ object Dependencies {
   lazy val scalaz7_core: ModuleMap = sv => scalazGroup(sv)       % "scalaz-core"        % scalaz7Version(sv) cross CVMappingScalaz
   lazy val slf4j_api              = "org.slf4j"                  % "slf4j-api"          % slf4jVersion
   lazy val squeryl                = "org.squeryl"                % "squeryl"            % "0.9.5-7" cross CVMappingAll
-  lazy val scala_xml              = "org.scala-lang.modules"     %% "scala-xml"         % "1.0.1"
-  lazy val scala_parser           = "org.scala-lang.modules"     %% "scala-parser-combinators" % "1.0.1"
+  lazy val scala_xml              = "org.scala-lang.modules"     %% "scala-xml"         % "1.3.0"
+  lazy val scala_parser           = "org.scala-lang.modules"     %% "scala-parser-combinators" % "1.1.2"
   lazy val xerces                 = "xerces" % "xercesImpl" % "2.11.0"
 
   // Aliases
@@ -81,17 +79,18 @@ object Dependencies {
   // Aliases
   lazy val h2 = h2database
 
-
   // Test scope:
   // Scope available only in test classpath, non-transitive by default.
   // TODO: See if something alternative with lesser footprint can be used instead of mega heavy apacheds
-  lazy val apacheds    = "org.apache.directory.server" % "apacheds-server-integ"    % "1.5.5"      % "test" // TODO: 1.5.7
-  lazy val jetty6      = "org.mortbay.jetty"           % "jetty"                    % "6.1.26"     % "test"
-  lazy val jwebunit    = "net.sourceforge.jwebunit"    % "jwebunit-htmlunit-plugin" % "2.5"        % "test"
-  lazy val mockito_all = "org.mockito"                 % "mockito-all"              % "1.9.0"      % "test"
-  lazy val scalacheck  = "org.scalacheck"             %% "scalacheck"               % "1.10.1"     % "test"
-  lazy val specs2: ModuleMap     = sv => "org.specs2"     %% "specs2"     % specs2Version(sv)      % "test"
-  lazy val scalatest: ModuleMap  = sv => "org.scalatest"  %% "scalatest"  % scalatestVersion(sv)   % "test"
-  lazy val junit       = "junit"                          % "junit"       % "4.8.2"                % "test"
-
+//  lazy val apacheds           = "org.apache.directory.server" % "apacheds-server-integ"    % "1.5.5"      % "test"
+  lazy val jetty6             = "org.mortbay.jetty"           % "jetty"                    % "6.1.26"     % "test"
+  lazy val jwebunit           = "net.sourceforge.jwebunit"    % "jwebunit-htmlunit-plugin" % "2.5"        % "test"
+  lazy val mockito_all        = "org.mockito"                 % "mockito-all"              % "1.9.0"      % "test"
+  lazy val scalacheck         = "org.scalacheck"             %% "scalacheck"               % "1.14.3"     % "test"
+  lazy val specs2             = "org.specs2"                 %% "specs2-core"              % "4.3.6"      % "test"
+  lazy val specs2Common       = "org.specs2"                 %% "specs2-common"            % "4.3.0"      % "test"
+  lazy val specs2Matcher      = "org.specs2"                 %% "specs2-matcher"           % "4.3.6"      % "test"
+  lazy val specs2MatcherExtra = "org.specs2"                 %% "specs2-matcher-extra"     % "4.3.6"      % "test"
+  lazy val scalatest          = "org.scalatest"              %% "scalatest"                % "3.2.0"      % "test"
+  lazy val junit              = "junit"                       % "junit"                    % "4.8.2"      % "test"
 }

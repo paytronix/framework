@@ -12,16 +12,18 @@ startYear in ThisBuild             := Some(2006)
 
 organizationName in ThisBuild      := "WorldWide Conferencing, LLC"
 
-scalaVersion in ThisBuild          := "2.10.4"
+scalaVersion in ThisBuild          := "2.12.10"
 
-crossScalaVersions in ThisBuild    := Seq("2.11.1", "2.10.4", "2.9.2", "2.9.1-1", "2.9.1")
+//crossScalaVersions in ThisBuild    := Seq()
 
-libraryDependencies in ThisBuild <++= scalaVersion {sv => Seq(specs2(sv), scalacheck, scalatest(sv)) }
+libraryDependencies in ThisBuild ++= Seq(specs2, specs2Common, specs2Matcher, specs2MatcherExtra, scalacheck, scalatest)
 
 // Settings for Sonatype compliance
 pomIncludeRepository in ThisBuild  := { _ => false }
 
-publishTo in ThisBuild            <<= isSnapshot(if (_) Some(Opts.resolver.sonatypeSnapshots) else Some(Opts.resolver.sonatypeStaging))
+//publishTo in ThisBuild            <<= isSnapshot(if (_) Some(Opts.resolver.sonatypeSnapshots) else Some(Opts.resolver.sonatypeStaging))
+//publishTo in ThisBuild := Some(MavenCache("local-maven", file(Path.userHome.asFile.toURI.toURL + ".m2/repository")))
+publishTo in ThisBuild := Some(Resolver.file("local-maven", file(Path.userHome + "/.m2/repository")))
 
 scmInfo in ThisBuild               := Some(ScmInfo(url("https://github.com/lift/framework"), "scm:git:https://github.com/lift/framework.git"))
 
@@ -35,3 +37,5 @@ resolvers  in ThisBuild           ++= Seq(
   "snapshots"     at "https://oss.sonatype.org/content/repositories/snapshots",
   "releases"      at "https://oss.sonatype.org/content/repositories/releases"
 )
+
+resolvers  in ThisBuild           += Resolver.mavenLocal

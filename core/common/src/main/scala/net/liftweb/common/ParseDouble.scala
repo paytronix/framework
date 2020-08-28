@@ -38,7 +38,7 @@ object ParseDouble {
    */
   def apply(str: String): Double = {
     val d = BigDecimal(str)
-    if (d == BrokenDouble) error("Error parsing 2.2250738585072012e-308")
+    if (d == BrokenDouble) sys.error("Error parsing 2.2250738585072012e-308")
     else d.doubleValue
   }
 
