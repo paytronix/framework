@@ -743,22 +743,23 @@ trait BindHelpers {
   class SuperArrowAssoc(name: String) {
     // Because JsObj is a subclass of Node, we don't want it
     // getting caught because it's not a bind param
-    def ->[T <: SpecialNode](in: T with SpecialNode) = Tuple2[String, T](name, in)
+// These functions were removed because these break -> syntax in Scala 2.12 for some reason I don't understand and don't care to understand --mexplsion 21-Sep-2020
+//    def ->[T <: SpecialNode](in: T with SpecialNode) = Tuple2[String, T](name, in)
 
-    def ->(in: String) = TheStrBindParam(name, in)
-    def ->(in: NodeSeq) = TheBindParam(name, in)
-    def ->(in: Text) = TheBindParam(name, in)
-    def ->(in: Node) = TheBindParam(name, in)
-    def ->(in: Seq[Node]) = TheBindParam(name, in)
-    def ->(in: NodeSeq => NodeSeq) = FuncBindParam(name, in)
-    def ->(in: Box[NodeSeq]) = BoxBindParam(name, in)
-    def ->(in: Option[NodeSeq]) = OptionBindParam(name, in)
-    def ->(in: Symbol) = SymbolBindParam(name, in)
-    def ->(in: Int) = IntBindParam(name, in)
-    def ->(in: Long) = LongBindParam(name, in)
-    def ->(in: Boolean) = BooleanBindParam(name, in)
-    def ->[T <: Bindable](in: T with Bindable) = TheBindableBindParam[T](name, in)
-    def ->[T](in: T) = Tuple2[String, T](name, in)
+//    def ->(in: String) = TheStrBindParam(name, in)
+//    def ->(in: NodeSeq) = TheBindParam(name, in)
+//    def ->(in: Text) = TheBindParam(name, in)
+//    def ->(in: Node) = TheBindParam(name, in)
+//    def ->(in: Seq[Node]) = TheBindParam(name, in)
+//    def ->(in: NodeSeq => NodeSeq) = FuncBindParam(name, in)
+//    def ->(in: Box[NodeSeq]) = BoxBindParam(name, in)
+//    def ->(in: Option[NodeSeq]) = OptionBindParam(name, in)
+//    def ->(in: Symbol) = SymbolBindParam(name, in)
+//    def ->(in: Int) = IntBindParam(name, in)
+//    def ->(in: Long) = LongBindParam(name, in)
+//    def ->(in: Boolean) = BooleanBindParam(name, in)
+//    def ->[T <: Bindable](in: T with Bindable) = TheBindableBindParam[T](name, in)
+//    def ->[T](in: T) = Tuple2[String, T](name, in)
 
     def -%>(in: NodeSeq) = FuncBindParam(name, old => addAttributes(in , (BindHelpers.currentNode.map(_.attributes) openOr Null)))
     def -%>(in: Box[NodeSeq]) = FuncBindParam(name,

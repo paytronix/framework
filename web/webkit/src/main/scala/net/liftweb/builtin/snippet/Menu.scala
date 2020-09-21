@@ -75,7 +75,7 @@ object Menu extends DispatchSnippet {
    * <p>If you are using designer friendly invocation, you can access the namespaced attributes: <br/>
    * &lt;div class="lift:Menu?li_item:class=foo+bar"&gt;menu&lt;/div&gt;
    * </p>
-   * 
+   *
    * <p>For a simple, default menu, simply add</p>
    *
    * <pre>
@@ -218,13 +218,13 @@ object Menu extends DispatchSnippet {
   def jsonMenu(ignore: NodeSeq): NodeSeq = {
     val toRender = renderWhat(true)
 
-    def buildItem(in: MenuItem): JsExp =  in match {
+    def buildItem(in: MenuItem): JsExp = in match {
       case MenuItem(text, uri, kids, current, path, _) =>
         JsObj("text" -> text.toString,
               "uri" -> uri.toString,
               "children" -> buildItems(kids),
               "current" -> current,
-              "cssClass" -> (in.cssClass openOr ""),
+              "cssClass" -> (in.cssClass.openOr(""):String),
               "placeholder" -> in.placeholder_?,
               "path" -> path)
     }
@@ -354,7 +354,7 @@ object Menu extends DispatchSnippet {
       val a = Helpers.addCssClass(loc.cssClassForMenuItem,
                                   <a href={link}>{linkText}</a> % attrs)
 
-      Group(bind("menu", toBind, "bind" -> a))
+      Group(bind("menu", toBind, TheBindParam("bind", a)))
     }
   }
 
@@ -419,7 +419,7 @@ object Menu extends DispatchSnippet {
       // Builds a link for the given loc
       def buildLink[T](loc : Loc[T]) = {
         Group(SiteMap.buildLink(name, text) match {
-          case e : Elem => 
+          case e : Elem =>
             Helpers.addCssClass(loc.cssClassForMenuItem,
                                 e % S.prefixedAttrsToMetaData("a"))
           case x => x
@@ -431,13 +431,13 @@ object Menu extends DispatchSnippet {
            (for {
              pv <- loc.convert(param)
              link <- loc.createLink(pv)
-           } yield 
+           } yield
              Helpers.addCssClass(loc.cssClassForMenuItem,
-                                 <a href={link}></a> % 
+                                 <a href={link}></a> %
                                  S.prefixedAttrsToMetaData("a"))) openOr
            Text("")
          }
-         
+
          case (Full(loc), _, _) if loc.name == name => {
            (linkToSelf, donthide) match {
              case (true, _) => buildLink(loc)
