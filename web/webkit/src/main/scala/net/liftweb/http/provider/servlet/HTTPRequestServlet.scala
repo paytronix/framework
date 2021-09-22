@@ -28,6 +28,8 @@ import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
 
+import scala.language.postfixOps
+
 class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider) extends HTTPRequest {
   private lazy val ctx = {
     new HTTPServletContext(req.getSession.getServletContext)
@@ -56,7 +58,7 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
     for {
       hne <- (Box !! req.getHeaderNames).asA[java.util.Enumeration[String]].toList
       n <- enumToList[String](hne) if null != n
-      hl <- Full(headers(n)) if !hl.isEmpty
+      hl <- Box.box2Iterable(Full(headers(n))) if !hl.isEmpty
     } yield HTTPParam(n, hl)
 
   def contextPath: String = req.getContextPath
@@ -140,14 +142,14 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
 
     def hasNext = what.hasNext
 
-    import scala.collection.JavaConversions._
+    import scala.collection.JavaConverters._
 
     def next = what.next match {
       case f if (f.isFormField) => NormalParamHolder(f.getFieldName, new String(readWholeStream(f.openStream), "UTF-8"))
       case f => {
         val headers = f.getHeaders()
-        val names: List[String] = if (headers eq null) Nil else headers.getHeaderNames().asInstanceOf[java.util.Iterator[String]].toList
-        val map: Map[String, List[String]] = Map(names.map(n => n -> headers.getHeaders(n).asInstanceOf[java.util.Iterator[String]].toList) :_*)
+        val names: List[String] = if (headers eq null) Nil else headers.getHeaderNames().asInstanceOf[java.util.Iterator[String]].asScala.toList
+        val map: Map[String, List[String]] = Map(names.map(n => n -> headers.getHeaders(n).asInstanceOf[java.util.Iterator[String]].asScala.toList) :_*)
         LiftRules.withMimeHeaders(map) {
           LiftRules.handleMimeFile(f.getFieldName, f.getContentType, f.getName, f.openStream)
         }
@@ -235,7 +237,7 @@ private class OfflineRequestSnapshot(req: HTTPRequest, val provider: HTTPProvide
   val scheme: String = req.scheme
 
   lazy val serverPort: Int = req.serverPort match {
-    case 80 => headers("X-SSL").flatMap(Helpers.asBoolean _).filter(a => a).map(a => 443).headOption getOrElse 80
+    case 80 => headers("X-SSL").flatMap(x => Box.box2Iterable(Helpers.asBoolean(x))).filter(a => a).map(a => 443).headOption getOrElse 80
     case x => x
   }
 

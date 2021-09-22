@@ -25,6 +25,7 @@ import net.liftweb.util.Helpers._
 import net.liftweb.http._
 import org.apache.commons.codec.binary._
 import scala.collection.mutable.{HashMap}
+import scala.language.postfixOps
 
 /**
  * All http authentication methods must implement these methods.

@@ -20,6 +20,8 @@ package util
 import scala.collection.mutable._
 import scala.util.parsing.combinator._
 
+import scala.language.postfixOps
+
 /**
  * Parser a VCard entry such as
  * 

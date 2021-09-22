@@ -55,7 +55,7 @@ trait ClassHelpers { self: ControlHelpers =>
       mod <- modifiers.view;
       val fullName = place + "." + mod(name);
       val ignore = List(classOf[ClassNotFoundException], classOf[ClassCastException], classOf[NoClassDefFoundError]);
-      klass <- tryo(ignore)(Class.forName(fullName).asSubclass(targetType).asInstanceOf[Class[C]])
+      klass <- Box.box2Iterable(tryo(ignore)(Class.forName(fullName).asSubclass(targetType).asInstanceOf[Class[C]]))
     ) yield klass).headOption
 
   /**
@@ -137,7 +137,7 @@ trait ClassHelpers { self: ControlHelpers =>
   def findType[C <: AnyRef](where: List[(String, List[String])])(implicit m: Manifest[C]): Box[Class[C]] =
   (for (
       (name, packages) <- where;
-      klass <- findType[C](name, packages)
+      klass <- Box.box2Iterable(findType[C](name, packages))
     ) yield klass).headOption
 
   /**

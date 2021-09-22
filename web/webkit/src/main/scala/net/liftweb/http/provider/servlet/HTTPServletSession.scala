@@ -23,6 +23,8 @@ import javax.servlet.http._
 import net.liftweb.common._
 import net.liftweb.util._
 
+import scala.language.postfixOps
+
 class HTTPServletSession(session: HttpSession) extends HTTPSession {
   private val LiftMagicID = "$lift_magic_session_thingy$"
 

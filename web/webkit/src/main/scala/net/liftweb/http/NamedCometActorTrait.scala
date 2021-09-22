@@ -20,6 +20,8 @@ package http
 import util.Helpers._
 import common.{Loggable, Full}
 
+import scala.language.postfixOps
+
 
 trait NamedCometActorTrait extends CometActor with Loggable {
 

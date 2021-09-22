@@ -21,9 +21,10 @@ package net.liftweb.markdown
 
 import collection.immutable.StringOps
 import collection.mutable.ListBuffer
+import scala.language.postfixOps
+import util.parsing.combinator.{Parsers, RegexParsers}
 import xml.{Group, Node, Text, NodeSeq, Elem => XmlElem, TopScope, XML}
 import xml.parsing.XhtmlParser
-import util.parsing.combinator.{Parsers, RegexParsers}
 
 /**
  * A parser for the markdown language.

@@ -51,7 +51,10 @@ case class ListOfBoxes[T](theListOfBoxes: List[Box[T]]) {
     if (theListOfBoxes.exists(_.isInstanceOf[Failure])) {
       Failure(failureErrorMessage) ~> theListOfBoxes
     } else {
-      Full(theListOfBoxes.flatten)
+      Full(theListOfBoxes.flatMap {
+        case Full(x) => List(x)
+        case _ => List.empty
+      })
     }
   }
 }

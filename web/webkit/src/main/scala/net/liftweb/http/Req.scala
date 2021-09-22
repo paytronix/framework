@@ -28,6 +28,8 @@ import Helpers._
 import http.provider._
 import sitemap._
 
+import scala.language.postfixOps
+
 
 object UserAgentCalculator extends Factory {
   /**
@@ -434,11 +436,11 @@ object Req {
         for {
           queryString <- request.queryString.toList
           nameVal <- queryString.split("&").toList.map(_.trim).filter(_.length > 0)
-          (name, value) <- nameVal.split("=").toList match {
+          (name, value) <- Box.box2Iterable(nameVal.split("=").toList match {
             case Nil => Empty
             case n :: v :: _ => Full((urlDecode(n), urlDecode(v)))
             case n :: _ => Full((urlDecode(n), ""))
-          }} yield (name, value)
+          })} yield (name, value)
             
             val names: List[String] = params.map(_._1).distinct
       val nvp: Map[String, List[String]] = params.foldLeft(Map[String, List[String]]()) {
@@ -687,7 +689,7 @@ object ContentType {
     (for {
       (part, index) <- str.charSplit(',').
       map(_.trim).zipWithIndex // split at comma
-      content <- parseIt(part, index)
+      content <- Box.box2Iterable(parseIt(part, index))
     } yield content).sortWith(_ < _)
 
   private object TwoType {

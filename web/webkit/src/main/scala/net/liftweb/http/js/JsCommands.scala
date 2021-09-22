@@ -23,6 +23,8 @@ import net.liftweb.common._
 import net.liftweb.util._
 import scala.xml.Node
 
+import scala.language.postfixOps
+
 object JsCommands {
   def create = new JsCommands(Nil)
 
@@ -122,7 +124,7 @@ object JsExp {
   import json._
 
   implicit def jValueToJsExp(jv: JValue): JsExp = new JsExp {
-    lazy val toJsCmd = Printer.compact(JsonAST.render(jv))
+    lazy val toJsCmd = JsonAST.compactRender(jv)
   }
 
   implicit def strToJsExp(str: String): JE.Str = JE.Str(str)

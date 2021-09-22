@@ -30,6 +30,7 @@ import js._
 import provider._
 import http.rest.RestContinuation
 
+import scala.language.postfixOps
 
 class SJBridge {
   def s = S
@@ -891,7 +892,7 @@ trait S extends HasParams with Loggable with UserAgentCalculator {
    * @see # loc ( String, NodeSeq )
    */
   def loc(str: String): Box[NodeSeq] =
-    resourceBundles.flatMap(r => tryo(r.getObject(str) match {
+    resourceBundles.flatMap(r => Box.box2Iterable(tryo(r.getObject(str) match {
       case null => LiftRules.localizationLookupFailureNotice.foreach(_(str, locale)); Empty
       case s: String => Full(LiftRules.localizeStringToXml(s))
       case g: Group => Full(g)
@@ -899,7 +900,7 @@ trait S extends HasParams with Loggable with UserAgentCalculator {
       case n: Node => Full(n)
       case ns: NodeSeq => Full(ns)
       case x => Full(Text(x.toString))
-    }).flatMap(s => s)).find(e => true)
+    })).flatMap(s => Box.box2Iterable(s))).find(e => true)
 
   /**
    * Localize the incoming string based on a resource bundle for the current locale,
@@ -1059,12 +1060,12 @@ trait S extends HasParams with Loggable with UserAgentCalculator {
   @deprecated("Use S.?() instead. S.?? will be removed in 2.6", "2.5")
   def ??(str: String, params: AnyRef*): String = String.format(locale, ?(str), params: _*)
 
-  private def ?!(str: String, resBundle: List[ResourceBundle]): String = resBundle.flatMap(r => tryo(r.getObject(str) match {
+  private def ?!(str: String, resBundle: List[ResourceBundle]): String = resBundle.flatMap(r => Box.box2Iterable(tryo(r.getObject(str) match {
     case s: String => Full(s)
     case n: Node => Full(n.text)
     case ns: NodeSeq => Full(ns.text)
     case _ => Empty
-  }).flatMap(s => s)).find(s => true) getOrElse {
+  })).flatMap(s => Box.box2Iterable(s))).find(s => true) getOrElse {
     LiftRules.localizationLookupFailureNotice.foreach(_(str, locale));
     str
   }

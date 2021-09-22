@@ -134,7 +134,7 @@ trait HttpHelpers {
   */
   def toHashMap[A,B](in : Map[A,B]) : HashMap[A,B] = {
     val ret = new HashMap[A,B];
-    in.keysIterator.foreach { k => ret += Pair(k, in(k)) }
+    in.keysIterator.foreach { k => ret += Tuple2(k, in(k)) }
     ret
   }
 

@@ -22,6 +22,7 @@ import common.Loggable
 import util.Helpers._
 import S.{?, ??}
 
+import scala.language.postfixOps
 
 /**
  * Base class for things that require pagination. Implements a contract

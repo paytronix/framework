@@ -20,6 +20,7 @@ package json
 import java.lang.reflect.{Constructor => JConstructor, Field, Type, ParameterizedType, GenericArrayType}
 import java.util.Date
 import java.sql.Timestamp
+import scala.language.postfixOps
 
 case class TypeInfo(clazz: Class[_], parameterizedType: Option[ParameterizedType])
 
@@ -205,7 +206,7 @@ private[json] object Meta {
 
   object Reflection {
     import java.lang.reflect._
-    import scala.collection.JavaConversions._
+    import scala.collection.JavaConverters._
 
     sealed abstract class Kind
     case object `* -> *` extends Kind

@@ -29,6 +29,7 @@ import JsCmds._
 import JE._
 import java.util.Locale
 
+import scala.language.postfixOps
 
 trait DeltaTrait {
   def toJs: JsCmd

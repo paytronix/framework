@@ -34,7 +34,7 @@ trait CombParserHelpers {
   implicit def strToInput(in: String): Input = new scala.util.parsing.input.CharArrayReader(in.toCharArray)
 
   /** @return true if the character is an end of file  */
-  def isEof(c: Char): Boolean = c == '\032'
+  def isEof(c: Char): Boolean = c == '\u001a'
 
   /** @return true if the character is not an end of file  */
   def notEof(c: Char): Boolean = !isEof(c)
@@ -98,7 +98,7 @@ trait CombParserHelpers {
   /**
    * @return a list of elements (Elem) from a String
    */
-  implicit def strToLst(in: String): List[Elem] = (new scala.collection.immutable.StringOps(in)).toList
+  implicit def strToLst(in: String): List[Elem] = (new scala.collection.immutable.WrappedString(in)).toList
 
   /**
    * @return a parser for a digit
@@ -119,13 +119,13 @@ trait CombParserHelpers {
    * @return a parser discarding end of lines
    */
   def EOL: Parser[Unit] = (accept("\n\r") | accept("\r\n") | '\r' |
-                           '\n' | '\032' ) ^^^ ()
+                           '\n' | '\u001a' ) ^^^ ()
 
   def notEOL: Parser[Elem] = (not(EOL) ~> anyChar)
 
-  def notEOF: Parser[Elem] = (not(accept('\032')) ~> anyChar)
+  def notEOF: Parser[Elem] = (not(accept('\u001a')) ~> anyChar)
 
-  def anyChar: Parser[Elem] = elem("Any Char", c => c != '\032')
+  def anyChar: Parser[Elem] = elem("Any Char", c => c != '\u001a')
 
   /**
    * @return a parser returning an Int if succeeding

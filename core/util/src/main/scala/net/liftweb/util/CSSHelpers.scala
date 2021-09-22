@@ -20,6 +20,7 @@ package util
 import scala.util.parsing.combinator._
 import common._
 import java.io._
+import scala.language.postfixOps
 
 object CSSHelpers extends ControlHelpers {
 

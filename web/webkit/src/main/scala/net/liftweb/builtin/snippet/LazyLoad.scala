@@ -29,6 +29,7 @@ import JE._
 import S._
 import Helpers._
 
+import scala.language.postfixOps
 
 /**
  * Enclose your snippet tags on your template with LazyLoad and the snippet will execute

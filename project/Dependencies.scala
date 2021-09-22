@@ -32,7 +32,7 @@ object Dependencies {
 
   lazy val scalazGroup        = defaultOrMapped("org.scalaz")
   lazy val scalazVersion      = defaultOrMapped("6.0.4")
-  lazy val scalaz7Version     = defaultOrMapped("7.0.0",  "2.11.0" -> "7.0.6", "2.11.1" -> "7.0.6", "2.12.10" -> "7.2.30")
+  lazy val scalaz7Version     = defaultOrMapped("7.2.30",  "2.11.0" -> "7.0.6", "2.11.1" -> "7.0.6", "2.12.10" -> "7.2.30", "2.13.6" -> "7.2.30")
 
   // Compile scope:
   // Scope available in all classpath, transitive by default.
@@ -87,10 +87,10 @@ object Dependencies {
   lazy val jwebunit           = "net.sourceforge.jwebunit"    % "jwebunit-htmlunit-plugin" % "2.5"        % "test"
   lazy val mockito_all        = "org.mockito"                 % "mockito-all"              % "1.9.0"      % "test"
   lazy val scalacheck         = "org.scalacheck"             %% "scalacheck"               % "1.14.3"     % "test"
-  lazy val specs2             = "org.specs2"                 %% "specs2-core"              % "4.3.6"      % "test"
-  lazy val specs2Common       = "org.specs2"                 %% "specs2-common"            % "4.3.0"      % "test"
-  lazy val specs2Matcher      = "org.specs2"                 %% "specs2-matcher"           % "4.3.6"      % "test"
-  lazy val specs2MatcherExtra = "org.specs2"                 %% "specs2-matcher-extra"     % "4.3.6"      % "test"
+  lazy val specs2             = "org.specs2"                 %% "specs2-core"              % "4.8.3"      % "test"
+  lazy val specs2Common       = "org.specs2"                 %% "specs2-common"            % "4.8.3"      % "test"
+  lazy val specs2Matcher      = "org.specs2"                 %% "specs2-matcher"           % "4.8.3"      % "test"
+  lazy val specs2MatcherExtra = "org.specs2"                 %% "specs2-matcher-extra"     % "4.8.3"      % "test"
   lazy val scalatest          = "org.scalatest"              %% "scalatest"                % "3.2.0"      % "test"
   lazy val junit              = "junit"                       % "junit"                    % "4.8.2"      % "test"
 }

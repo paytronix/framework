@@ -18,7 +18,6 @@ package net.liftweb
 
 package object json {
   import java.io.Reader
-  import scala.text.Document
 
   type JValue   = JsonAST.JValue
   val  JNothing = JsonAST.JNothing
@@ -41,8 +40,5 @@ package object json {
   def parse(s: String): JValue = JsonParser.parse(s)
   def parseOpt(s: String): Option[JValue] = JsonParser.parseOpt(s)
 
-  def render(value: JValue): Document = JsonAST.render(value)
-  def compact(d: Document): String = Printer.compact(d)
-  def pretty(d: Document): String = Printer.pretty(d)
   def compactRender(value: JValue): String = JsonAST.compactRender(value)
 }

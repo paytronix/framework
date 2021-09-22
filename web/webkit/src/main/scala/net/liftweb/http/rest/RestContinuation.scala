@@ -22,6 +22,7 @@ import scala.collection.mutable.{HashMap, ListBuffer}
 import net.liftweb.common._
 import net.liftweb.actor._
 import net.liftweb.util._
+import scala.language.postfixOps
 
 final private[http] case class ContinuationException(req: Req, session: Box[LiftSession], f: ((=> LiftResponse) => Unit) => Unit) extends LiftFlowOfControlException("Continuation")
 

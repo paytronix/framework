@@ -19,6 +19,7 @@ package sitemap
 
 import scala.xml.NodeSeq
 
+import scala.language.postfixOps
 
 /**
  * The beginning of an experiment to provide a capability to define

@@ -29,6 +29,7 @@ import provider._
 import json.JsonAST.JValue
 import net.liftweb.json._
 import java.util.concurrent.atomic.AtomicInteger
+import scala.language.postfixOps
 
 
 /**

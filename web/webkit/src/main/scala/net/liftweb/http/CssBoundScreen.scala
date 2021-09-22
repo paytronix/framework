@@ -145,7 +145,7 @@ trait CssBoundScreen extends ScreenWizardRendered with Loggable {
       logger.trace("Looking for fields with style %s".format(style),
         (for {
           field <- fields;
-          bindingInfo <- field.binding if bindingInfo.bindingStyle == style
+          bindingInfo <- Box.box2Iterable(field.binding) if bindingInfo.bindingStyle == style
         } yield (bindingInfo, field)).toList)
 
     def templateFields: List[CssBindFunc] = List(sel(_.fieldContainer, ".%s") #> (fieldsWithStyle(Template, true) map (field => bindField(field))))
@@ -163,7 +163,7 @@ trait CssBoundScreen extends ScreenWizardRendered with Loggable {
     def customFields: List[CssBindFunc] =
       for {
         field <- fields
-        bindingInfo <- field.binding
+        bindingInfo <- Box.box2Iterable(field.binding)
         custom <- Some(bindingInfo.bindingStyle) collect { case c:Custom => c }
       } yield traceInline("Binding custom field %s to %s".format(bindingInfo.selector(formName), custom.template),
         bindingInfo.selector(formName) #> bindField(field)(custom.template))
@@ -171,7 +171,7 @@ trait CssBoundScreen extends ScreenWizardRendered with Loggable {
     def dynamicFields: List[CssBindFunc] =
       for {
         field <- fields
-        bindingInfo <- field.binding
+        bindingInfo <- Box.box2Iterable(field.binding)
         dynamic <- Some(bindingInfo.bindingStyle) collect { case d:Dynamic => d }
       } yield {
         val template = dynamic.func()

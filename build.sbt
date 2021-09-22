@@ -2,7 +2,7 @@ import Dependencies._
 
 organization in ThisBuild          := "net.liftweb"
 
-version in ThisBuild :=  "2.6.3"
+version in ThisBuild               :=  "2.6.3-px"
 
 homepage in ThisBuild              := Some(url("http://www.liftweb.net"))
 
@@ -12,11 +12,11 @@ startYear in ThisBuild             := Some(2006)
 
 organizationName in ThisBuild      := "WorldWide Conferencing, LLC"
 
-scalaVersion in ThisBuild          := "2.12.10"
+scalaVersion in ThisBuild          := "2.13.6"
 
 credentials in ThisBuild += Credentials(Path.userHome / ".sbt" / ".credentials")
 
-libraryDependencies in ThisBuild ++= Seq(specs2, specs2Common, specs2Matcher, specs2MatcherExtra, scalacheck, scalatest)
+libraryDependencies in ThisBuild ++= Seq(specs2, specs2Common, specs2Matcher, specs2MatcherExtra, scalacheck, scalatest, scala_xml)
 
 // Settings for Sonatype compliance
 pomIncludeRepository in ThisBuild  := { _ => false }
@@ -38,7 +38,6 @@ val PaytronixSnapshots = "paytronix-snapshots" at PaytronixNexus + "content/repo
 val PaytronixReleases = "paytronix-releases" at PaytronixNexus + "content/repositories/releases"
 
 resolvers in ThisBuild            ++= Seq(LocalMaven, PaytronixSnapshots, PaytronixReleases)
-resolvers in ThisBuild            ++= Seq("maven-central" at "https://nexus.corp.paytronix.com/nexus/repositories/central/content/")
 resolvers in ThisBuild             += Resolver.mavenLocal
 
 publishTo in ThisBuild := {

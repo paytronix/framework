@@ -28,6 +28,8 @@ import JsCmds._
 import JE._
 import Helpers._
 
+import scala.language.postfixOps
+
 /**
  * <p>This built-in snippet can be used to render a menu representing your SiteMap.
  * There are three main snippet methods that you can use:</p>

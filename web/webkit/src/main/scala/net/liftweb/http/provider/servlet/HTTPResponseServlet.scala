@@ -26,6 +26,8 @@ import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
 
+import scala.language.postfixOps
+
 class HTTPResponseServlet(resp: HttpServletResponse) extends HTTPResponse {
   private var _status = 0;
  

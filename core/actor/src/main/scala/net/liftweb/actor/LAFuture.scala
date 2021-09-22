@@ -348,7 +348,10 @@ object LAFuture {
             vals.insert(idx, Full(v))
             gotCnt += 1
             if (gotCnt >= len) {
-              ret.satisfy(vals.toList.flatten)
+              ret.satisfy(vals.toList.flatMap {
+                case Full(x) => List(x)
+                case _ => List.empty
+              })
             }
           }
         }
@@ -382,7 +385,10 @@ object LAFuture {
                 vals.insert(idx, Full(v))
                 gotCnt += 1
                 if (gotCnt >= len) {
-                  ret.satisfy(Full(vals.toList.flatten))
+                  ret.satisfy(Full(vals.toList.flatMap {
+                    case Full(x) => List(x)
+                    case _ => List.empty
+                  }))
                 }
               }
               

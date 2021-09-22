@@ -88,7 +88,7 @@ case class SiteMap(globalParamFuncs: List[PartialFunction[Box[Req], Loc.AnyLocPa
    * This method returns menu tree
    */
   def menuForGroup(group: String): CompleteMenu = {
-    CompleteMenu(kids.flatMap(_.makeMenuItem(Nil, group)))
+    CompleteMenu(kids.flatMap(x => Box.box2Iterable(x.makeMenuItem(Nil, group))))
   }
 
   lazy val menus: List[Menu] = locs.valuesIterator.map(_.menu).toList
@@ -101,7 +101,7 @@ case class SiteMap(globalParamFuncs: List[PartialFunction[Box[Req], Loc.AnyLocPa
       case Full(loc) => loc.breadCrumbs
       case _ => Nil
     }
-    CompleteMenu(kids.flatMap(_.makeMenuItem(path)))
+    CompleteMenu(kids.flatMap(x => Box.box2Iterable(x.makeMenuItem(path))))
   }
 }
 

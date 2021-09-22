@@ -611,15 +611,15 @@ case class Menu(loc: Loc[_], private val convertableKids: ConvertableToMenu*) ex
   override def buildUpperLines(pathAt: HasKids, actual: Menu, populate: List[MenuItem]): List[MenuItem]
   = {
     val kids: List[MenuItem] =
-    _parent.toList.flatMap(_.kids.toList.flatMap(m => m.loc.buildItem(if (m == this)
+    _parent.toList.flatMap(_.kids.toList.flatMap(m => Box.box2Iterable(m.loc.buildItem(if (m == this)
                                                                       populate else
-                                                                      Nil, m == actual, m == pathAt)))
+                                                                      Nil, m == actual, m == pathAt))))
 
     _parent.toList.flatMap(p => p.buildUpperLines(p, actual, kids))
   }
 
   def makeMenuItem(path: List[Loc[_]]): Box[MenuItem] =
-    loc.buildItem(kids.toList.flatMap(_.makeMenuItem(path)) ::: loc.supplementalKidMenuItems, _lastInPath(path), _inPath(path))
+    loc.buildItem(kids.toList.flatMap(x => Box.box2Iterable(x.makeMenuItem(path))) ::: loc.supplementalKidMenuItems, _lastInPath(path), _inPath(path))
 
   /**
    * Make a menu item only of the current loc is in the given group

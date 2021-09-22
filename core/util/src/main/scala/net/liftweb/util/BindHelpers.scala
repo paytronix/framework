@@ -363,7 +363,7 @@ trait BindHelpers {
      * @param myValue The value to place in the new attribute
      * @param newAttr The new attribute in the form (prefix,label)
      */
-    def apply(name: String, myValue: => NodeSeq, newAttr: Pair[String,String]) =
+    def apply(name: String, myValue: => NodeSeq, newAttr: Tuple2[String,String]) =
       PrefixedBindWithAttr(newAttr._1, new AttrBindParam(name, myValue, newAttr._2))
 
     /**
@@ -374,7 +374,7 @@ trait BindHelpers {
      * @param myValue The value to place in the new attribute
      * @param newAttr The new attribute in the form (prefix,label)
      */
-    def apply(name: String, myValue: String, newAttr: Pair[String,String]) =
+    def apply(name: String, myValue: String, newAttr: Tuple2[String,String]) =
       PrefixedBindWithAttr(newAttr._1, new AttrBindParam(name,
         if (null eq myValue) NodeSeq.Empty else Text(myValue), newAttr._2))
   }
@@ -455,7 +455,7 @@ trait BindHelpers {
      * into the new attribute value
      * @param newAttr The new attribute name in the form (prefix,label)
      */
-    def apply(name: String, value: => NodeSeq => NodeSeq, newAttr: Pair[String,String]) =
+    def apply(name: String, value: => NodeSeq => NodeSeq, newAttr: Tuple2[String,String]) =
       PrefixedBindWithAttr(newAttr._1, new FuncAttrBindParam(name, value, newAttr._2))
   }
 
@@ -557,7 +557,7 @@ trait BindHelpers {
      * be omitted.
      * @param newAttr The new attribute name in the form (prefix,label)
      */
-    def apply(name: String, func: => NodeSeq => Option[NodeSeq], newAttr: Pair[String,String]) =
+    def apply(name: String, func: => NodeSeq => Option[NodeSeq], newAttr: Tuple2[String,String]) =
       PrefixedBindWithAttr(newAttr._1, new FuncAttrOptionBindParam(name, func, newAttr._2))
   }
 
@@ -638,7 +638,7 @@ trait BindHelpers {
      * be omitted.
      * @param newAttr The new attribute name in the form (prefix,label)
      */
-    def apply(name: String, func: => NodeSeq => Box[NodeSeq], newAttr: Pair[String,String]) =
+    def apply(name: String, func: => NodeSeq => Box[NodeSeq], newAttr: Tuple2[String,String]) =
       PrefixedBindWithAttr(newAttr._1, new FuncAttrBoxBindParam(name, func, newAttr._2))
   }
 
@@ -1197,9 +1197,9 @@ trait BindHelpers {
    */
   def findBox[T](nodes: Seq[Node])(f: Elem => Box[T]): Box[T] = {
     nodes.view.flatMap {
-      case Group(g) => findBox(g)(f)
-      case e: Elem => f(e) or findBox(e.child)(f)
-      case _ => Empty
+      case Group(g) => Box.box2Iterable(findBox(g)(f))
+      case e: Elem => Box.box2Iterable(f(e) or findBox(e.child)(f))
+      case _ => Iterable.empty
     }.headOption
   }
 

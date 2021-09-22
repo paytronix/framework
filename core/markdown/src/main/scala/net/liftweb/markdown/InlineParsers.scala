@@ -1,5 +1,7 @@
 package net.liftweb.markdown
 
+import scala.language.postfixOps
+
 /*
  * Copyright 2013 WorldWide Conferencing, LLC
  *

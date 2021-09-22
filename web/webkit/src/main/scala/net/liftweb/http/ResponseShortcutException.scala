@@ -20,6 +20,8 @@ package http
 import net.liftweb.common._
 import net.liftweb.util._
 
+import scala.language.postfixOps
+
 /**
  * This exception is used by LiftSession.destroySessionAndContinueInNewSession
  * to unwind the stack so that the session can be destroyed and a new

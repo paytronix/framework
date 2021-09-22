@@ -21,7 +21,7 @@ package net.liftweb.markdown
 
 import scala.util.parsing.combinator.RegexParsers
 import collection.SortedMap
-
+import scala.language.postfixOps
 
 /**
  * Basic parsers for Markdown Source.

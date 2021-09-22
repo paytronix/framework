@@ -319,10 +319,10 @@ trait Loc[T] {
    */
   def paramTemplate: Box[NodeSeq] =
     allParams.flatMap {
-      case Loc.Template(f) => Some(f());
-      case Loc.ValueTemplate(f) => Some(f(currentValue));
-      case Loc.TemplateBox(f) => f()
-      case Loc.ValueTemplateBox(f) => f(currentValue)
+      case Loc.Template(f) => Some(f())
+      case Loc.ValueTemplate(f) => Some(f(currentValue))
+      case Loc.TemplateBox(f) => Box.box2Option(f())
+      case Loc.ValueTemplateBox(f) => Box.box2Option(f(currentValue))
       case _ => None
     }.headOption
 
@@ -394,7 +394,7 @@ trait Loc[T] {
   def breadCrumbs: List[Loc[_]] = _menu.breadCrumbs ::: List(this)
 
   def buildKidMenuItems(kids: Seq[Menu]): List[MenuItem] = {
-    kids.toList.flatMap(_.loc.buildItem(Nil, false, false)) ::: supplementalKidMenuItems
+    kids.toList.flatMap(x => Box.box2Iterable(x.loc.buildItem(Nil, false, false))) ::: supplementalKidMenuItems
   }
 
   @deprecated("Use supplementalKidMenuItems with an 'e'. This misspelled variant will be removed in Lift 3.0.", "2.6")
@@ -403,7 +403,7 @@ trait Loc[T] {
   def supplementalKidMenuItems: List[MenuItem] =
     for {
       p <- childValues
-      l <- link.createLink(p).map(appendQueryParams(p))
+      l <- Box.box2Iterable(link.createLink(p).map(appendQueryParams(p)))
     } yield MenuItem(
         text.text(p),
         l, Nil, false, false,

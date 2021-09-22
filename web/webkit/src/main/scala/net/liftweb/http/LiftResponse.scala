@@ -26,6 +26,8 @@ import net.liftweb.util.Helpers._
 import net.liftweb.json.JsonAST
 import java.io.{OutputStream, OutputStreamWriter, Writer, ByteArrayOutputStream}
 
+import scala.language.postfixOps
+
 /**
  * 200 response but without body.
  */
@@ -63,15 +65,11 @@ case class CreatedResponse(xml: Node, mime: String, addlHeaders: List[(String, S
  * the client. Usually used with HTTP PUT.
  */
 object CreatedResponse {
-
-  lazy val jsonPrinter: scala.text.Document => String =
-    LiftRules.jsonOutputConverter.vend
-
   def apply(json: JsonAST.JValue, addlHeaders: List[(String, String)]): LiftResponse = {
     val headers: List[(String, String)] = S.getResponseHeaders( Nil ) ++  addlHeaders
 
     new JsonResponse(new JsExp {
-      lazy val toJsCmd = jsonPrinter(JsonAST.render(json))
+      lazy val toJsCmd = JsonAST.compactRender(json)
     }, headers, Nil, 201)
   }
 
@@ -295,12 +293,9 @@ object JsonResponse {
 
   def apply(_json: JsonAST.JValue, _headers: List[(String, String)], _cookies: List[HTTPCookie], code: Int): LiftResponse = {
     new JsonResponse(new JsExp {
-      lazy val toJsCmd = jsonPrinter(JsonAST.render((_json)))
+      lazy val toJsCmd = JsonAST.compactRender((_json))
     }, _headers, _cookies, code)
   }
-
-  lazy val jsonPrinter: scala.text.Document => String =
-    LiftRules.jsonOutputConverter.vend
 }
 
 case class JsonResponse(json: JsExp, headers: List[(String, String)], cookies: List[HTTPCookie], code: Int) extends LiftResponse {

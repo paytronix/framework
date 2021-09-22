@@ -31,6 +31,7 @@ object BuildDef extends Build {
                 aggregatedSetting(dependencyClasspath in(Compile, doc)),
                 publishArtifact := false)
 
+/*
   lazy val frameworkPre211 =
     liftProject("lift-framework-pre-211", file("."))
       .aggregate(liftProjects ++ pre_211_project : _*)
@@ -38,13 +39,14 @@ object BuildDef extends Build {
                 aggregatedSetting(dependencyClasspath in(Compile, doc)),
                 publishArtifact := false,
                 target <<= baseDirectory / "target-pre-211")
+*/
 
   // Core Projects
   // -------------
   lazy val core: Seq[ProjectReference] =
-    Seq(common, actor, markdown, json, json_scalaz7, json_ext, util)
+    Seq(common, actor, markdown, json, json_ext, util)
 
-  lazy val pre_211_project: Seq[ProjectReference] = Seq(json_scalaz)
+//  lazy val pre_211_project: Seq[ProjectReference] = Seq(json_scalaz)
 
   lazy val common =
     coreProject("common")
@@ -73,6 +75,7 @@ object BuildDef extends Build {
                   parallelExecution in Test := false,
                   libraryDependencies <++= scalaVersion { sv => Seq(scalap(sv), paranamer) })
 
+/*
   lazy val json_scalaz =
     coreProject("json-scalaz")
         .dependsOn(json)
@@ -84,6 +87,7 @@ object BuildDef extends Build {
         .dependsOn(json)
         .settings(description := "JSON Library based on Scalaz 7",
                   libraryDependencies <+= scalaVersion(scalaz7))
+*/
 
   lazy val json_ext =
     coreProject("json-ext")
@@ -103,17 +107,20 @@ object BuildDef extends Build {
   // Web Projects
   // ------------
   lazy val web: Seq[ProjectReference] =
-    Seq(testkit, webkit)
+    Seq(webkit)
 //    Seq(testkit, webkit, wizard)
 
+/*
   lazy val testkit =
     webProject("testkit")
         .dependsOn(util)
         .settings(description := "Testkit for Webkit Library",
                   libraryDependencies ++= Seq(commons_httpclient, servlet_api))
+*/
   lazy val webkit =
     webProject("webkit")
-        .dependsOn(util, testkit % "provided")
+        .dependsOn(util)
+//        .dependsOn(util, testkit % "provided")
         .settings(libraryDependencies += mockito_all)
         .settings(yuiCompressor.Plugin.yuiSettings: _*)
         .settings(description := "Webkit Library",

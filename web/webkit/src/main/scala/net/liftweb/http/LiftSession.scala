@@ -21,7 +21,7 @@ import java.lang.reflect.Method
 import java.util.concurrent.ConcurrentHashMap
 
 import scala.collection.mutable.{HashMap, ListBuffer}
-import collection.JavaConversions
+import collection.JavaConverters
 
 import xml._
 
@@ -35,6 +35,7 @@ import builtin.snippet._
 import js._
 import provider._
 
+import scala.language.postfixOps
 
 object LiftSession {
 
@@ -856,8 +857,8 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
   }
 
   def doCometActorCleanup(): Unit = {
-    import scala.collection.JavaConversions._
-    this.nasyncComponents.values.foreach(_ ! ShutdownIfPastLifespan)
+    import scala.collection.JavaConverters._
+    this.nasyncComponents.values.asScala.foreach(_ ! ShutdownIfPastLifespan)
   }
 
   /**
@@ -931,8 +932,8 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
       }
 
 
-      import scala.collection.JavaConversions._
-      nmessageCallback.foreach {
+      import scala.collection.JavaConverters._
+      nmessageCallback.asScala.foreach {
         case (k, f) =>
           if (!f.sessionLife &&
             f.owner.isDefined &&
@@ -1065,8 +1066,8 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
       }
     }
 
-      import scala.collection.JavaConversions._
-      (0 /: nmessageCallback)((l, v) => l + (v._2.owner match {
+      import scala.collection.JavaConverters._
+      (0 /: nmessageCallback.asScala)((l, v) => l + (v._2.owner match {
         case Full(owner) if (owner == ownerName) =>
           v._2.lastSeen = time
           1
@@ -1080,8 +1081,8 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
    * Returns true if there are functions bound for this owner
    */
   private[http] def hasFuncsForOwner(owner: String): Boolean = {
-    import scala.collection.JavaConversions._
-    !nmessageCallback.find(_._2.owner == owner).isEmpty
+    import scala.collection.JavaConverters._
+    !nmessageCallback.asScala.find(_._2.owner == owner).isEmpty
   }
 
   private def shutDown() = {
@@ -1096,8 +1097,8 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
 
         SessionMaster.sendMsg(RemoveSession(this.uniqueId))
 
-        import scala.collection.JavaConversions._
-        nasyncComponents.foreach {
+        import scala.collection.JavaConverters._
+        nasyncComponents.asScala.foreach {
           case (_, comp) => done ::= (() => tryo(comp ! ShutDown))
         }
         cleanUpSession()
@@ -2102,10 +2103,10 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
    */
   def findComet(theType: String): List[LiftCometActor] = {
     testStatefulFeature {
-      import scala.collection.JavaConversions._
-      nasyncComponents.flatMap {
-        case ((Full(name), _), value) if name == theType => Full(value)
-        case _ => Empty
+      import scala.collection.JavaConverters._
+      nasyncComponents.asScala.flatMap {
+        case ((Full(name), _), value) if name == theType => Box.box2Iterable(Full(value))
+        case _ => Iterable.empty
       }.toList
     }
   }
@@ -2226,9 +2227,9 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
 
       val toCmp = Full(act.uniqueId)
 
-      import scala.collection.JavaConversions._
+      import scala.collection.JavaConverters._
       nmessageCallback.remove(act.jsonCall.funcId)
-      nmessageCallback.foreach {
+      nmessageCallback.asScala.foreach {
         case (k, f) =>
           if (f.owner == toCmp) nmessageCallback.remove(k)
       }
@@ -2242,7 +2243,7 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
 
       val id = Full(act.uniqueId)
 
-      nmessageCallback.foreach {
+      nmessageCallback.asScala.foreach {
         case (k, f) =>
 
           if (f.owner == id) {

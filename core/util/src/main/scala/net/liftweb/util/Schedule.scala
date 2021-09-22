@@ -18,6 +18,7 @@ package net.liftweb
 package util
 
 import java.util.concurrent._
+import net.liftweb.util.Helpers
 import Helpers.TimeSpan
 import common._
 import actor.ThreadPoolRules
