@@ -100,7 +100,7 @@ object BuildDef extends Build {
         .dependsOn(actor, json, markdown)
         .settings(description := "Utilities Library",
                   parallelExecution in Test := false,
-                  libraryDependencies <++= scalaVersion {sv =>  Seq(scala_compiler(sv), joda_time,
+                  libraryDependencies <++= scalaVersion {sv =>  Seq(joda_time,
                     joda_convert, commons_codec, javamail, log4j, htmlparser, xerces)}
                   )
 
