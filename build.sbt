@@ -12,7 +12,7 @@ startYear in ThisBuild             := Some(2006)
 
 organizationName in ThisBuild      := "WorldWide Conferencing, LLC"
 
-scalaVersion in ThisBuild          := "2.13.6"
+scalaVersion in ThisBuild          := "2.11.12"
 
 credentials in ThisBuild += Credentials(Path.userHome / ".sbt" / ".credentials")
 
@@ -44,3 +44,5 @@ publishTo in ThisBuild := {
     if (isSnapshot.value) Some(PaytronixSnapshots)
     else                  Some(PaytronixReleases)
 }
+
+
