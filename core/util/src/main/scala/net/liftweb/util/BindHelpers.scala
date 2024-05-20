@@ -997,7 +997,7 @@ trait BindHelpers {
             }
           }
           case Group(nodes) => Group(in_bind(nodes))
-          case s: Elem => Elem(s.prefix, s.label, attrBind(s.attributes), if (preserveScope) s.scope else TopScope,
+          case s: Elem => Elem(s.prefix, s.label, attrBind(s.attributes), if (preserveScope) s.scope else TopScope, minimizeEmpty = false,
                                in_bind(s.child): _*)
           case n => n
         }
