@@ -144,11 +144,11 @@ private[http] trait LiftMerge {
                       node <- _fixHtml(nodes, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy)
                     } yield node
 
-                  case e: Elem if e.label == "form" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "action", v.attributes, true), v.scope, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
-                  case e: Elem if e.label == "script" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "src", v.attributes, false), v.scope, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
-                  case e: Elem if e.label == "a" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "href", v.attributes, true), v.scope, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
-                  case e: Elem if e.label == "link" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "href", v.attributes, false), v.scope, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
-                  case e: Elem => Elem(v.prefix, v.label, fixAttrs(v.attributes, "src", v.attributes, true), v.scope, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
+                  case e: Elem if e.label == "form" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "action", v.attributes, true), v.scope, e.minimizeEmpty, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
+                  case e: Elem if e.label == "script" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "src", v.attributes, false), v.scope, e.minimizeEmpty, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
+                  case e: Elem if e.label == "a" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "href", v.attributes, true), v.scope, e.minimizeEmpty, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
+                  case e: Elem if e.label == "link" => Elem(v.prefix, v.label, fixAttrs(v.attributes, "href", v.attributes, false), v.scope, e.minimizeEmpty, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
+                  case e: Elem => Elem(v.prefix, v.label, fixAttrs(v.attributes, "src", v.attributes, true), v.scope, e.minimizeEmpty, _fixHtml(v.child, inHtml, inHead, justHead, inBody, justBody, bodyHead, bodyTail, doMergy): _*)
                   case c: Comment if stripComments => NodeSeq.Empty
                   case _ => v
                 }
@@ -233,12 +233,12 @@ private[http] trait LiftMerge {
       }
 
       htmlKids += nl
-      htmlKids += Elem(headTag.prefix, headTag.label, headTag.attributes, headTag.scope, headChildren.toList: _*)
+      htmlKids += Elem(headTag.prefix, headTag.label, headTag.attributes, headTag.scope, headTag.minimizeEmpty, headChildren.toList: _*)
       htmlKids += nl
-      htmlKids += Elem(bodyTag.prefix, bodyTag.label, bodyTag.attributes, bodyTag.scope, bodyChildren.toList: _*)
+      htmlKids += Elem(bodyTag.prefix, bodyTag.label, bodyTag.attributes, bodyTag.scope, bodyTag.minimizeEmpty, bodyChildren.toList: _*)
       htmlKids += nl
 
-      val tmpRet = Elem(htmlTag.prefix, htmlTag.label, htmlTag.attributes, htmlTag.scope, htmlKids.toList: _*)
+      val tmpRet = Elem(htmlTag.prefix, htmlTag.label, htmlTag.attributes, htmlTag.scope, htmlTag.minimizeEmpty, htmlKids.toList: _*)
 
       val ret: Node = if (Props.devMode) {
         LiftRules.xhtmlValidator.toList.flatMap(_(tmpRet)) match {
@@ -252,7 +252,7 @@ private[http] trait LiftMerge {
             val rule = new RewriteRule {
               override def transform(n: Node) = n match {
                 case e: Elem if e.label == "body" =>
-                  Elem(e.prefix, e.label, e.attributes, e.scope, e.child ++ errors: _*)
+                  Elem(e.prefix, e.label, e.attributes, e.scope, e.minimizeEmpty, e.child ++ errors: _*)
 
                 case x => super.transform(x)
               }

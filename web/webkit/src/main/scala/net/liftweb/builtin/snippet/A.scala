@@ -41,7 +41,7 @@ object A extends DispatchSnippet {
    *   }
    *   </pre>
    */
-  def render(kids: NodeSeq) : NodeSeq = Elem(null, "a", addAjaxHREF(), TopScope, kids :_*)
+  def render(kids: NodeSeq) : NodeSeq = Elem(null, "a", addAjaxHREF(), TopScope, minimizeEmpty = false, kids :_*)
 
   private def addAjaxHREF(): MetaData = {
     val ajax: JsExp = SHtml.makeAjaxCall(JE.Str(S.attr.~("key").map(_.text + "=true").getOrElse("")))

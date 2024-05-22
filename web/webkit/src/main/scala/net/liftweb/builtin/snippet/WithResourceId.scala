@@ -52,14 +52,14 @@ object WithResourceId extends DispatchSnippet {
              MetaData.update(attrs, 
                              scope, 
                              new UnprefixedAttribute("href", LiftRules.attachResourceId(href), Null)),
-             scope, childs: _*)) openOr e
+             scope, minimizeEmpty = false, childs: _*)) openOr e
      case e @ Elem(prefix, "script", attrs, scope, childs @ _*) => 
         attrStr(attrs, "src") map (src =>
         Elem(prefix, "script", 
              MetaData.update(attrs, 
                              scope, 
                              new UnprefixedAttribute("src", LiftRules.attachResourceId(src), Null)),
-             scope, childs: _*)) openOr e
+             scope, minimizeEmpty = false, childs: _*)) openOr e
      case e => e
     })
   }
