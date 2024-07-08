@@ -685,7 +685,7 @@ trait CometActor extends LiftActor with LiftCometActor with BindHelpers {
    */
   def buildSpan(time: Long, xml: NodeSeq): NodeSeq = {
     Elem(parentTag.prefix, parentTag.label, parentTag.attributes,
-      parentTag.scope, Group(xml)) %
+      parentTag.scope, parentTag.minimizeEmpty, Group(xml)) %
       new UnprefixedAttribute("id",
         Text(spanId),
         if (time > 0L) {

@@ -2063,7 +2063,7 @@ class LiftSession(private[http] val _contextPath: String, val uniqueId: String,
 
         case v: Elem =>
           Elem(v.prefix, v.label, processAttributes(v.attributes, this.allowAttributeProcessing.is),
-            v.scope, processSurroundAndInclude(page, v.child): _*)
+            v.scope, v.minimizeEmpty, processSurroundAndInclude(page, v.child): _*)
 
         case pcd: scala.xml.PCData => pcd
         case text: Text => text
@@ -2468,7 +2468,7 @@ private object SnippetNode {
         } yield {
           val (par, nonLift) = liftAttrsAndParallel(elm.attributes)
           val newElm = new Elem(elm.prefix, elm.label,
-            nonLift, elm.scope, elm.child: _*)
+            nonLift, elm.scope, elm.minimizeEmpty, elm.child: _*)
           (newElm, newElm, par ||
             (lift.find {
               case up: UnprefixedAttribute if up.key == "parallel" => true
