@@ -17,7 +17,7 @@
 package net.liftweb
 package jpa
 
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 
 import net.liftweb.http.TransientRequestVar
 

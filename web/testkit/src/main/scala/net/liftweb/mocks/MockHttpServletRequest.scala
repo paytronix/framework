@@ -25,8 +25,8 @@ import java.util.Date
 import java.util.Locale
 import java.util.{Enumeration => JEnum}
 import java.util.{HashMap => JHash}
-import javax.servlet._
-import javax.servlet.http._
+import jakarta.servlet._
+import jakarta.servlet.http._
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer

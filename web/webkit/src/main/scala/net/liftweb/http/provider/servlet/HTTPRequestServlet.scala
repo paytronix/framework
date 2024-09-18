@@ -19,18 +19,18 @@ package http
 package provider 
 package servlet 
 
-import java.io.{InputStream}
-import java.util.{Locale}
-import javax.servlet.http.{HttpServletRequest}
-import org.apache.commons.fileupload.servlet._
-import org.apache.commons.fileupload.ProgressListener
+import java.io.InputStream
+import java.util.Locale
+import jakarta.servlet.http.{HttpServletRequest}
+import org.apache.commons.fileupload2.jakarta.servlet5.{JakartaServletFileUpload}
+import org.apache.commons.fileupload2.core.ProgressListener
 import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
 
 import scala.language.postfixOps
 
-class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider) extends HTTPRequest {
+class HTTPRequestServlet(@transient val req: HttpServletRequest, @transient val provider: HTTPProvider) extends HTTPRequest {
   private lazy val ctx = {
     new HTTPServletContext(req.getSession.getServletContext)
   }
@@ -69,7 +69,7 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
 
   // don't cache... allow multiple sessions for the request
   // necessary for session destruction on login
-  def session = new HTTPServletSession(req getSession)
+  def session = new HTTPServletSession(req.getSession)
 
   def uri = req.getRequestURI
 
@@ -95,11 +95,11 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
 
   def remoteHost: String = req.getRemoteHost
 
-  def serverName = req getServerName
+  def serverName = req.getServerName
 
-  def scheme: String = req getScheme
+  def scheme: String = req.getScheme
 
-  def serverPort = req getServerPort
+  def serverPort = req.getServerPort
 
   def method: String = req.getMethod
 
@@ -107,7 +107,7 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
 
   def inputStream: InputStream = req.getInputStream
 
-  def multipartContent_? = ServletFileUpload.isMultipartContent(req)
+  def multipartContent_? = JakartaServletFileUpload.isMultipartContent(req)
 
   /**
    * Destroy the underlying servlet session
@@ -129,11 +129,11 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
     } yield id
 
   def extractFiles: List[ParamHolder] = (new Iterator[ParamHolder] {
-    val mimeUpload = (new ServletFileUpload)
+    val mimeUpload = new JakartaServletFileUpload
     mimeUpload.setProgressListener(new ProgressListener {
       lazy val progList: (Long, Long, Int) => Unit = S.session.flatMap(_.progressListener) openOr LiftRules.progressListener
 
-      def update(a: Long, b: Long, c: Int) {progList(a, b, c)}
+      def update(a: Long, b: Long, c: Int): Unit = {progList(a, b, c)}
     })
 
     mimeUpload.setSizeMax(LiftRules.maxMimeSize)
@@ -142,16 +142,16 @@ class HTTPRequestServlet(val req: HttpServletRequest, val provider: HTTPProvider
 
     def hasNext = what.hasNext
 
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
 
     def next = what.next match {
-      case f if (f.isFormField) => NormalParamHolder(f.getFieldName, new String(readWholeStream(f.openStream), "UTF-8"))
+      case f if (f.isFormField) => NormalParamHolder(f.getFieldName, new String(readWholeStream(f.getInputStream), "UTF-8"))
       case f => {
         val headers = f.getHeaders()
         val names: List[String] = if (headers eq null) Nil else headers.getHeaderNames().asInstanceOf[java.util.Iterator[String]].asScala.toList
         val map: Map[String, List[String]] = Map(names.map(n => n -> headers.getHeaders(n).asInstanceOf[java.util.Iterator[String]].asScala.toList) :_*)
         LiftRules.withMimeHeaders(map) {
-          LiftRules.handleMimeFile(f.getFieldName, f.getContentType, f.getName, f.openStream)
+          LiftRules.handleMimeFile(f.getFieldName, f.getContentType, f.getName, f.getInputStream)
         }
       }
     }

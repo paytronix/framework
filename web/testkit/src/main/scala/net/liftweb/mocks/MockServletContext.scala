@@ -33,8 +33,8 @@ import java.util.Arrays
 import java.util.Date
 import java.util.Locale
 import java.util.Vector
-import javax.servlet._
-import javax.servlet.http._
+import jakarta.servlet._
+import jakarta.servlet.http._
 
 /**
  * An example of how to use these mock classes in your unit tests:

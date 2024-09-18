@@ -20,7 +20,8 @@ package provider
 package servlet
 package containers
 
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 import net.liftweb.common._
 import net.liftweb.http._
@@ -43,7 +44,7 @@ object Jetty7AsyncProvider extends AsyncProviderMeta {
                isResumed) = {
     try {
       val cc = Class.forName("org.eclipse.jetty.continuation.ContinuationSupport")
-      val meth = cc.getMethod("getContinuation", classOf[javax.servlet.ServletRequest])
+      val meth = cc.getMethod("getContinuation", classOf[ServletRequest])
       val cci = Class.forName("org.eclipse.jetty.continuation.Continuation")
       val getAttribute = cci.getMethod("getAttribute", classOf[String])
       val setAttribute = cci.getMethod("setAttribute", classOf[String], classOf[AnyRef])
