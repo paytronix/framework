@@ -37,7 +37,7 @@ object Dependencies {
   // Compile scope:
   // Scope available in all classpath, transitive by default.
   lazy val commons_codec          = "commons-codec"              % "commons-codec"      % "1.6"
-  lazy val commons_fileupload     = "org.apache.commons"         % "commons-fileupload2-jakarta-servlet5" % "2.0.0-M2"
+  lazy val commons_fileupload     = "org.apache.commons"         % "commons-fileupload2-jakarta-servlet6" % "2.0.0-M2"
   lazy val commons_httpclient     = "commons-httpclient"         % "commons-httpclient" % "3.1"
   lazy val jakartamail            = "jakarta.mail"               % "jakarta.mail-api"   % "2.1.3"
 
