@@ -37,9 +37,10 @@ object Dependencies {
   // Compile scope:
   // Scope available in all classpath, transitive by default.
   lazy val commons_codec          = "commons-codec"              % "commons-codec"      % "1.6"
-  lazy val commons_fileupload     = "commons-fileupload"         % "commons-fileupload" % "1.3.1"
+  lazy val commons_fileupload     = "org.apache.commons"         % "commons-fileupload2-jakarta-servlet6" % "2.0.0-M2"
   lazy val commons_httpclient     = "commons-httpclient"         % "commons-httpclient" % "3.1"
-  lazy val javamail               = "javax.mail"                 % "mail"               % "1.4.4"
+  lazy val jakartamail            = "jakarta.mail"               % "jakarta.mail-api"   % "2.1.3"
+
   lazy val joda_time              = "joda-time"                  % "joda-time"          % "2.1"
   lazy val joda_convert           = "org.joda"                   % "joda-convert"       % "1.2"
   lazy val htmlparser             = "nu.validator.htmlparser"    % "htmlparser"         % "1.4"
@@ -64,11 +65,11 @@ object Dependencies {
 
   // Provided scope:
   // Scope provided by container, available only in compile and test classpath, non-transitive by default.
-  lazy val logback         = "ch.qos.logback"    % "logback-classic" % "1.0.9"      % "provided"
-  lazy val log4j           = "log4j"             % "log4j"           % "1.2.16"     % "provided"
-  lazy val slf4j_log4j12   = "org.slf4j"         % "slf4j-log4j12"   % slf4jVersion % "provided"
-  lazy val persistence_api = "javax.persistence" % "persistence-api" % "1.0"        % "provided"
-  lazy val servlet_api     = "javax.servlet"     % "servlet-api"     % "2.5"        % "provided"
+  lazy val logback         = "ch.qos.logback"    % "logback-classic"      % "1.0.9"      % "provided"
+  lazy val log4j           = "log4j"             % "log4j"                % "1.2.16"     % "provided"
+  lazy val slf4j_log4j12   = "org.slf4j"         % "slf4j-log4j12"        % slf4jVersion % "provided"
+  lazy val persistence_api = "javax.persistence" % "persistence-api"      % "1.0"        % "provided"
+  lazy val servlet_api     = "jakarta.servlet"   % "jakarta.servlet-api"  % "6.0.0"      % "provided"
 
 
   // Runtime scope:

@@ -17,8 +17,9 @@
 package net.liftweb
 package util
 
-import javax.mail._
-import javax.mail.internet._
+import jakarta.activation.{DataHandler, DataSource}
+import jakarta.mail._
+import jakarta.mail.internet._
 import javax.naming.{Context, InitialContext}
 import java.util.Properties
 import common._
@@ -278,7 +279,7 @@ trait Mailer extends SimpleInjector {
   }
 
   /**
-   * Given a MailBodyType, convert it to a javax.mail.BodyPart.  You can override this method if you
+   * Given a MailBodyType, convert it to a jakarta.mail.BodyPart.  You can override this method if you
    * add custom MailBodyTypes
    */
   protected def buildMailBody(tab: MailBodyType): BodyPart = {
@@ -336,7 +337,7 @@ trait Mailer extends SimpleInjector {
     part.setFileName(holder.name)
     part.setContentID(holder.name)
     part.setDisposition(if (holder.attachment) Part.ATTACHMENT else Part.INLINE)
-    part.setDataHandler(new javax.activation.DataHandler(new javax.activation.DataSource {
+    part.setDataHandler(new DataHandler(new DataSource {
       def getContentType = holder.mimeType
       def getInputStream = new java.io.ByteArrayInputStream(holder.bytes)
       def getName = holder.name

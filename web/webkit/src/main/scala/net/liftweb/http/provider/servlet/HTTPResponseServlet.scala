@@ -21,7 +21,7 @@ package servlet
 
 import scala.collection.mutable.{ListBuffer}
 import java.io.{OutputStream}
-import javax.servlet.http.{HttpServletResponse, Cookie}
+import jakarta.servlet.http.{HttpServletResponse, Cookie}
 import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
@@ -33,7 +33,7 @@ class HTTPResponseServlet(resp: HttpServletResponse) extends HTTPResponse {
  
   def addCookies(cookies: List[HTTPCookie]) = cookies.foreach {
     case c =>
-      val cookie = new javax.servlet.http.Cookie(c.name, c.value openOr null)
+      val cookie = new Cookie(c.name, c.value openOr null)
       c.domain map (cookie.setDomain(_))
       c.path map (cookie.setPath(_))
       c.maxAge map (cookie.setMaxAge(_))

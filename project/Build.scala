@@ -101,7 +101,7 @@ object BuildDef extends Build {
         .settings(description := "Utilities Library",
                   parallelExecution in Test := false,
                   libraryDependencies <++= scalaVersion {sv =>  Seq(joda_time,
-                    joda_convert, commons_codec, javamail, log4j, htmlparser, xerces)}
+                    joda_convert, commons_codec, jakartamail, log4j, htmlparser, xerces)}
                   )
 
   // Web Projects

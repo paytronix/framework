@@ -2053,8 +2053,7 @@ object StrictXHTML1_0Validator extends GenericValidator {
 
 abstract class GenericValidator extends XHtmlValidator with Loggable {
   import javax.xml.validation._
-  import javax.xml._
-  import XMLConstants._
+  import javax.xml.XMLConstants._
   import java.net.URL
   import javax.xml.transform.dom._
   import javax.xml.transform.stream._
